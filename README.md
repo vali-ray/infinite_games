@@ -14,7 +14,7 @@ LLMs can solve these challenges through their generalization capabilities and un
 
 We incentivize the prediction of future events. We currently restrict the prediction space to binary future events listed on Polymarket.
 
-The immediate value that can be extracted by validators through this subnet is related to the improvement of the efficiency of prediction markets through arbitrage. The validators my obtain a better knowledge of the probability of an event settling and communicate this information to a prediction market by opening a position.    
+The immediate value that can be extracted by validators through this subnet is related to the improvement of the efficiency of prediction markets through arbitrage. The validators may obtain a better knowledge of the probability of an event settling and communicate this information to a prediction market by opening a position.    
 
 We plan first to extend the set of predicted events to other prediction markets. We then aim at obtaining a continuous feed of organic events by using e.g a Reuters API. In the future, any headline of the WSJ could be an event on which a miner could be evaluated upon.
 
@@ -22,7 +22,7 @@ We plan first to extend the set of predicted events to other prediction markets.
 
 In the same line, the first application built on top of our subnet could be related to prediction market. A trader could query our market to obtain the most up to date predictions according to the current news landscape (LLMs would be constantly ingressing the most up to date and relevant news articles). They could then readjust their positions accordingly / trade on this information.
 
-More generally, a validator could provide payed economic forecasts to companies or individuals. It could also be used by scientists to design their experiment and frame their ideas. For example, the value of a paper often resides in the way the results are presented and cross-analysed. One way resulting in poor conclusions while the other giving good results. An LLM might help detect the adequate framework.
+More generally, a validator could provide paid economic forecasts to companies or individuals. It could also be used by scientists to design their experiment and frame their ideas. For example, the value of a paper often resides in the way the results are presented and cross-analysed. One way resulting in poor conclusions while the other giving good results. An LLM might help detect the adequate framework.
 
 
 
@@ -42,20 +42,20 @@ A reference providing a baseline miner strategy is the article ["Approaching Hum
 Validators record the miners' predictions and score them once the Polymarket events settles. At each event settlement, a score is added to the moving average of the miner's score. This simple model ensures that all validators score the miners at roughly the same time. We also implement a cutoff for the submission time of a prediction, currently set at 24 hours. This means that miners must submit their prediction for a given Polymarket event 24 hours before the settlement time.
 
 ## Scoring methodology
-*We are still in v0 but should upgrade the repo very soon.*
+*We will launch our repo with model 0 i.e the simplest scoring rule and then improve it*
 
-### v0
+### model 0
 
 The validators only implement a quadratic scoring rule (the Brier score) on the miners' predictions. If the miner predicted that the binary outcome $1$ will be realized with probability $p$, upon settlement of the outcome the validator scores the miner by adding $(o_i - p_i)^2$ to their moving average of the miner's score, where $o_i$ is $0$ or $1$. 
 
-### v1
+### model 1
 
 In this model, we would discard the moving average update and validators would record the scores obtained at settlement time. They would then all update the aggregated scores of miners at an agreed upon time. 
 
 Denote by $S(p_j, o_i) = (o_i - p_i)^2$ the quadratic scoring rule for a prediction $p_j$ of an event $E_i$ and where $o_i$ is $0$ or $1$ depending on the realization of $E_i$. The lower the quadratic scoring rule the better the score. A quadratic scoring rule is strictly proper i.e it strictly incentivizes miner to report their true prediction.
 
 
-We implement a sequentially shared quadratic scoring rule. This allows us to score $0$ miners that do not bring new information to the market, as well as to bring value by aggregating information. 
+We will implement a sequentially shared quadratic scoring rule. This allows us to score $0$ miners that do not bring new information to the market, as well as to bring value by aggregating information. 
 This functions by scoring each miner relatively to the previous one. The score of the miner $j$ is then $S_j = S(p_j, o_i) - S(p_{j-1}, o_i)$ where $p_{j-1}$ is the submission of the previous miner. Importantly this payoff can be negative, therefore in practice when aggregating the scores of a miner we add a $\max(-,0)$ operation. 
 
 The aggregated score of a miner that a validator sends to the blockchain is the following:
@@ -88,12 +88,12 @@ Two important commands are `btcli wallet list` and `btcli wallet overview`.
 
 The first enables one to vizualize their wallets in a tree-like manner as well as which hotkeys are associated with a given coldkey. Importantly, one can see the wallet name that is associated with each pair of coldkey and hotkey. This is important since the names of the coldkey and the hotkey are used rather than the keys themselves when running bittensor commands related to wallets.  
 
-The second enables one to see the subnets  in which their wallet is registered as well as the wallet's balance. 
+The second enables one to see the subnets in which their wallet is registered as well as the wallet's balance. 
 
 
 ## Incentive compability
 
-The properness of the scoring rule ensures that the best outcome for the miner is to submit what they truly believe to be the probability distribution of the predicted event. The sequentially shared aspect ensures we only reward miners that bring new information. We aim at implementing soon a commit-reveal step as well for the miner prediction. This is however not crucial since the problem of copy-pasting is already handled by the scoring rule. It only makes the system more robust.
+The properness of the scoring rule ensures that the best outcome for the miner is to submit what they truly believe to be the probability distribution of the predicted event. The sequentially shared aspect ensures we only reward miners that bring new information. We want to implement a commit-reveal step as well for the miner prediction. This is however not crucial since the problem of copy-pasting is already handled by the scoring rule. It only makes the system more robust.
 
 In this setting where miners do not risk a negative return for making bad predictions, we are faced with a sybil exploit which consists in deploying two miners with each predicting one outcome of the binary event with maximal confidence. This is mitigated by the registration cost a miner has to pay to enter a subnet, as well as by the upper bound on the number of miners that can participate in the subnet ($192$). 
 
