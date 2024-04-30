@@ -22,7 +22,7 @@ We plan first to extend the set of predicted events to other prediction markets.
 
 In the same line, the first application built on top of our subnet could be related to prediction market. A trader could query our market to obtain the most up to date predictions according to the current news landscape (LLMs would be constantly ingressing the most up to date and relevant news articles). They could then readjust their positions accordingly / trade on this information.
 
-More generally, a validator could provide payed economic forecasts to companies or individuals. It could also be used by scientists to design their experiment and frame their ideas. For example, the value of a paper often resides in the way the results are presented and cross-analysed. One way resulting in poor conclusions while the other giving good results. An LLM might help detect the adequate framework.
+More generally, a validator could provide paid economic forecasts to companies or individuals. It could also be used by scientists to design their experiment and frame their ideas. For example, the value of a paper often resides in the way the results are presented and cross-analysed. One way resulting in poor conclusions while the other giving good results. An LLM might help detect the adequate framework.
 
 
 
