@@ -124,6 +124,10 @@ First clone this repo by running `git clone https://github.com/amedeo-gigaver/in
 5. Run the appropriate script, replacing values in curly brackets: `python neurons/{miner}.py --netuid 30  --wallet.name {default} --wallet.hotkey {default}`
 6. The venv should be active whenever the neurons are run.
 
+### Computational requirements
+
+Currently the requirements are minimal for a validator and depend on the model used for the miner. We will update this section regularly.
+
 ## Setting up a bittensor wallet
 A detailed explanation of how to set up a wallet can be found [here](https://docs.bittensor.com/getting-started/wallets). 
 We also provide some indications [here](docs/wallet-setup.md).
