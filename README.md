@@ -4,7 +4,7 @@
 # **Infinite Games** <!-- omit in toc -->
 
 
-[Infinite Games Discord](https://discord.com/channels/799672011265015819/1209554949449457705) • [Network](https://taostats.io/) •
+[Discord](https://discord.com/channels/799672011265015819/1209554949449457705) • [Network](https://taostats.io/) •
 [Website](https://www.infinitegam.es/)
 
 ---
