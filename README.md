@@ -1,10 +1,37 @@
-<div align="left">
+
+<p align="center">
+  <a>
+    <img width="500" alt="infinite games logo" src="https://photos.app.goo.gl/upD1pvzi4y83E8D7A">
+  </a>
+</p>
+
+<h1> Infinite Games
+
+<div align='center'>
+
+
+
+[![Discord Chat](https://img.shields.io/discord/1163496128499683389.svg)](https://discord.com/channels/799672011265015819/1209554949449457705)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
+<!-- update with discord invite link -->
+
+</div>
+
+<p align="center">
+  <a href="https://www.infinitegam.es/">Website</a>
   
-# Forecasting of future events
+  <!--
+  <a href="">Twitter</a> -->
+    
+  <!-- <a href="">Bittensor</a> -->
+</p>
+
+# Forecasting of Future Events
 
 ## Problem
 
-Making predictions is a hard task that requires cross-domain knowledge and intuition. It is often limited in explanatory reasoning and domain-specific (the expert in predicting election result will differ from the one predicting the rocket-engine progress) ([1]). At the same time it is fundamental to human society, from geopolitics to economics. The COVID-19 measures for example were based on epidemiological forecasts. Science is another area where prediction is crucial ([2]) to determine new designs or to predict the outcome of experiments (executing one experiment is costly). Such predictions rely on the knowledge of thousands papers and on multidisciplinary and multidimensional analysis (can a study replicate ? should one use a molecular or behavioral approach?).
+Making predictions is a hard task that requires cross-domain knowledge and intuition. It is often limited in explanatory reasoning and domain-specific (the expert in predicting election result will differ from the one predicting the progress in rocket-engine technology) ([1]). At the same time it is fundamental to human society, from geopolitics to economics. The COVID-19 measures for example were based on epidemiological forecasts. Science is another area where prediction is crucial ([2]) to determine new designs or to predict the outcome of experiments (executing one experiment is costly). Such predictions rely on the knowledge of thousands papers and on multidisciplinary and multidimensional analysis (can a study replicate ? should one use a molecular or behavioral approach?).
 
 LLMs can solve these challenges through their generalization capabilities and unbounded information processing. 
 
@@ -14,16 +41,14 @@ LLMs can solve these challenges through their generalization capabilities and un
 
 We incentivize the prediction of future events. We currently restrict the prediction space to binary future events listed on Polymarket.
 
-The immediate value that can be extracted by validators through this subnet is related to the improvement of the efficiency of prediction markets through arbitrage. The validators may obtain a better knowledge of the probability of an event settling and communicate this information to a prediction market by opening a position.    
 
-We plan first to extend the set of predicted events to other prediction markets. We then aim at obtaining a continuous feed of organic events by using e.g a Reuters API. In the future, any headline of the WSJ could be an event on which a miner could be evaluated upon.
+### Real-world applications
 
-### Applications built on the subnet
+The immediate value of the subnet is the improvement of the efficiency of prediction markets. This value can be extracted by validators through arbitrage. The validators may obtain a better knowledge of the probability of an event settling and communicate this information to a prediction market by opening a position. 
 
-In the same line, the first application built on top of our subnet could be related to prediction market. A trader could query our market to obtain the most up to date predictions according to the current news landscape (LLMs would be constantly ingressing the most up to date and relevant news articles). They could then readjust their positions accordingly / trade on this information.
+In the same line, the first application built on top of our subnet could be related to prediction markets. A trader could query our market to obtain the most up to date predictions according to the current news landscape (LLMs would be constantly ingressing the most up to date and relevant news articles). They could then readjust their positions accordingly or directly trade on this information.
 
-More generally, a validator could provide paid economic forecasts to companies or individuals. It could also be used by scientists to design their experiment and frame their ideas. For example, the value of a paper often resides in the way the results are presented and cross-analysed. One way resulting in poor conclusions while the other giving good results. An LLM might help detect the adequate framework.
-
+More generally, a validator could provide paid economic forecasts to companies or individuals. The subnet could also be used by scientists to design their experiment and frame their ideas. For example, the value of a paper often resides in the way the results are presented and cross-analysed. One way resulting in poor conclusions while the other giving good results. An LLM might help detect the adequate framework.
 
 
 
@@ -34,15 +59,15 @@ Miners compete by sending to the validators a dictionary where the key is a [Pol
 
 ### Miner strategy 
 
-A reference providing a baseline miner strategy is the article ["Approaching Human Level Forecasting with Langage Models"](https://arxiv.org/html/2402.18563v1?s=35) ([1]). The authors fine-tune an LLM to generate predictions on binary events (including the ones listed on Polymarket) which nears the performance of human forecasters when submitting a forecast for each prediction, and which beats human forecasters in a setting where the LLM can choose to give a prediction or not based on its confidence.
+A reference providing a **baseline miner** strategy is the article ["Approaching Human Level Forecasting with Langage Models"](https://arxiv.org/html/2402.18563v1?s=35) ([1]). The authors fine-tune an LLM to generate predictions on binary events (including the ones listed on Polymarket) which nears the performance of human forecasters when submitting a forecast for each prediction, and which beats human forecasters in a setting where the LLM can choose to give a prediction or not based on its confidence.
 
 
 ## Validators
 
-Validators record the miners' predictions and score them once the Polymarket events settles. At each event settlement, a score is added to the moving average of the miner's score. This simple model ensures that all validators score the miners at roughly the same time. We also implement a cutoff for the submission time of a prediction, currently set at 24 hours. This means that miners must submit their prediction for a given Polymarket event 24 hours before the settlement time.
+Validators record the miners' predictions and score them once the Polymarket events settles. At each event settlement, a score is added to the moving average of the miner's score. This simple model ensures that all validators score the miners at roughly the same time. We also implement a **cutoff** for the submission time of a prediction, currently set at 24 hours. This means that miners must submit their prediction for a given Polymarket event 24 hours before the settlement time.
 
 ## Scoring methodology
-*We will launch our repo with model 0 i.e the simplest scoring rule and then improve it*
+*We will launch our repo with model 0 i.e the simplest scoring rule and then move to model 1*
 
 ### model 0
 
@@ -67,6 +92,16 @@ We give miners a score of $0$ on the events for which they did not submit a pred
 
 
 In the first implementation, instead of paying the miner for their delta to the previous prediction, we pay them for their delta to the Polymarket probability at the submission time i.e $S(p_j, o_i) - S(\text{price on polymarket at t}, o_i)$ where $p_j$ is submitted at $t$.
+
+## Future developments
+
+As mentioned previously, we first aim at implementing a continuous stream of events for miners to do predictions.
+
+We plan first to extend the set of predicted events to other prediction markets. We then aim at obtaining a continuous feed of organic events by using e.g a Reuters API. In the future, any headline of the WSJ could be an event on which a miner could be evaluated upon.
+
+We then aim at substantially developing the prediction framework by allowing for combinatorial updates in the futures i.e the ability for miners to add conditional logic to their prediction e.g *if the aggregated probability of event X passes a threshold Y, make prediction Z*. 
+In the limit, miners could update the weights of an entire LLM.
+
 
 ## Running a miner or validator
 
@@ -96,12 +131,6 @@ The second enables one to see the subnets in which their wallet is registered as
 The properness of the scoring rule ensures that the best outcome for the miner is to submit what they truly believe to be the probability distribution of the predicted event. The sequentially shared aspect ensures we only reward miners that bring new information. We want to implement a commit-reveal step as well for the miner prediction. This is however not crucial since the problem of copy-pasting is already handled by the scoring rule. It only makes the system more robust.
 
 In this setting where miners do not risk a negative return for making bad predictions, we are faced with a sybil exploit which consists in deploying two miners with each predicting one outcome of the binary event with maximal confidence. This is mitigated by the registration cost a miner has to pay to enter a subnet, as well as by the upper bound on the number of miners that can participate in the subnet ($192$). 
-
-## Future developments
-
-As mentioned previously, we first aim at implementing a continuous stream of events for miners to do predictions.
-We then aim at substantially developing the prediction framework by allowing for combinatorial updates in the futures i.e the ability for miners to add conditional logic to their prediction e.g *if the aggregated probability of event X passes a threshold Y, make prediction Z*. 
-In the limit, miners could update the weights of an entire LLM.
 
 
 ## References
