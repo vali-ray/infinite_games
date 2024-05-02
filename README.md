@@ -69,7 +69,7 @@ A reference providing a **baseline miner** strategy is the article ["Approaching
 Validators record the miners' predictions and score them once the Polymarket events settles. At each event settlement, a score is added to the moving average of the miner's score. This simple model ensures that all validators score the miners at roughly the same time. We also implement a **cutoff** for the submission time of a prediction, currently set at 24 hours. This means that miners must submit their prediction for a given Polymarket event 24 hours before the settlement time.
 
 ## Scoring rule
-*We will launch our repo with model 0 i.e the simplest scoring rule and then move to model 1*
+*We will launch our repo with model 0 i.e the simplest scoring rule and then move to model 1.*
 
 ### model 0
 
