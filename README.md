@@ -1,7 +1,7 @@
 
 <p align="center">
   <a>
-    <img width="500" alt="infinite games logo" src="https://photos.app.goo.gl/upD1pvzi4y83E8D7A">
+    <img width="500" alt="infinite games logo" src="https://ibb.co/DzLvKYR">
   </a>
 </p>
 
@@ -20,12 +20,12 @@
 
 <p align="center">
   <a href="https://www.infinitegam.es/">Website</a>
-  
+</p>
   <!--
   <a href="">Twitter</a> -->
     
   <!-- <a href="">Bittensor</a> -->
-</p>
+
 
 # Forecasting of Future Events
 
