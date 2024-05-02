@@ -1,26 +1,27 @@
 
-<p align="center">
-  <a>
-    <img width="500" alt="infinite games logo" src="https://ibb.co/DzLvKYR">
-  </a>
-</p>
+<div align="center">
 
-<h1> Infinite Games
+# **Infinite Games** <!-- omit in toc -->
+[![I](/docs/nous.png)](https://nousresearch.com/)
+[![Bittensor](/docs/taologo.png)](https://bittensor.com/)
 
-<div align='center'>
+---
+
+[Infinite Games Discord](https://discord.com/channels/799672011265015819/1209554949449457705) • [Network](https://taostats.io/)
+[Website](https://www.infinitegam.es/)
+
+---
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
+
+</div>
 
 
-
-[![Discord Chat](https://img.shields.io/discord/1163496128499683389.svg)](https://discord.com/channels/799672011265015819/1209554949449457705)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 <!-- update with discord invite link -->
 
 </div>
 
-<p align="center">
-  <a href="https://www.infinitegam.es/">Website</a>
-</p>
   <!--
   <a href="">Twitter</a> -->
     
