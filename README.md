@@ -1,7 +1,9 @@
 
 <div align="center">
 
-# **Infinite Games** <!-- omit in toc -->
+<img src="docs/infinite-games.jpeg" alt="Project Logo" width="200"/>
+
+# **Infinite Games** 
 
 
 [Discord](https://discord.com/channels/799672011265015819/1209554949449457705) • [Network](https://taostats.io/) •

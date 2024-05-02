@@ -61,12 +61,12 @@ with codecs.open(
     version_string = version_match.group(1)
 
 setup(
-    name="ocr_subnet",
+    name="infinite games subnet",
     version=version_string,
-    description="Bittensor OCR subnet tutorial",
+    description="Forecasting of future events",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/steffencruz/ocr_subnet",
+    url="https://github.com/amedeo-gigaver/infinite_games.git",
     author="bittensor.com",  
     packages=find_packages(),
     include_package_data=True,
