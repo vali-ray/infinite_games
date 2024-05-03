@@ -73,7 +73,7 @@ A reference providing a **baseline miner** strategy is the article ["Approaching
 Validators record the miners' predictions and score them once the Polymarket events settles. At each event settlement, a score is added to the moving average of the miner's score. This simple model ensures that all validators score the miners at roughly the same time. Importantly, we implement a **cutoff** for the submission time of a prediction, currently set at 24 hours. This means that miners must submit their prediction for a given Polymarket event 24 hours before the settlement time.
 
 ## Scoring rule
-*We will launch our repo with model 1 and then move to model 2.*
+*We will launch our subnet with model 1 and then move to model 2.*
 
 Denote by $S(p_i, o_i) = (o_i - p_i)^2$ the quadratic scoring rule (the Brier score) for a prediction $p_i$ of a binary event $E_i$ and where $o_i$ is $0$ or $1$ depending on the realization of $E_i$. The lower the quadratic scoring rule the better the score. A quadratic scoring rule is strictly proper i.e it strictly incentivizes miner to report their true prediction.
 
