@@ -6,7 +6,7 @@
 # **Infinite Games** 
 
 
-[Discord](https://discord.com/channels/799672011265015819/1209554949449457705) • 
+[Discord](https://discord.gg/eZaZ6unD) • 
 [Website](https://www.infinitegam.es/) • [Network](https://taostats.io/) 
 
 ---
@@ -32,7 +32,11 @@
 ##  Introduction
 
 
-We incentivize the prediction of future events. We currently restrict the prediction space to binary future events listed on Polymarket. We will expand soon to new markets and providers.
+We incentivize the prediction of future events. We currently restrict the prediction space to binary future events listed on Polymarket. We will expand soon to new markets and providers. We are focused on *judgemental forecasting* rather than *statistical forecasting*. We hence expect the models used by miners to be LLMs. 
+
+### High-level mechanism
+
+Miners submit their predictions to validators. Each prediction has to be done early enough before the event underlying the prediction settles. Once the event settles, the validators that received the prediction score the miner.
 
 ## LLMs open new predictive capabilities
 
