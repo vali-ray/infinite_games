@@ -70,33 +70,32 @@ A reference providing a **baseline miner** strategy is the article ["Approaching
 
 ## Validators
 
-Validators record the miners' predictions and score them once the Polymarket events settles. At each event settlement, a score is added to the moving average of the miner's score. This simple model ensures that all validators score the miners at roughly the same time. We also implement a **cutoff** for the submission time of a prediction, currently set at 24 hours. This means that miners must submit their prediction for a given Polymarket event 24 hours before the settlement time.
+Validators record the miners' predictions and score them once the Polymarket events settles. At each event settlement, a score is added to the moving average of the miner's score. This simple model ensures that all validators score the miners at roughly the same time. Importantly, we implement a **cutoff** for the submission time of a prediction, currently set at 24 hours. This means that miners must submit their prediction for a given Polymarket event 24 hours before the settlement time.
 
 ## Scoring rule
-*We will launch our repo with model 0 i.e the simplest scoring rule and then move to model 1.*
+*We will launch our repo with model 1 and then move to model 2.*
 
-### model 0
-
-The validators only implement a quadratic scoring rule (the Brier score) on the miners' predictions. If the miner predicted that the binary outcome $1$ will be realized with probability $p$, upon settlement of the outcome the validator scores the miner by adding $(o_i - p_i)^2$ to their moving average of the miner's score, where $o_i$ is $0$ or $1$. 
+Denote by $S(p_i, o_i) = (o_i - p_i)^2$ the quadratic scoring rule (the Brier score) for a prediction $p_i$ of a binary event $E_i$ and where $o_i$ is $0$ or $1$ depending on the realization of $E_i$. The lower the quadratic scoring rule the better the score. A quadratic scoring rule is strictly proper i.e it strictly incentivizes miner to report their true prediction.
 
 ### model 1
 
-In this model, we would discard the moving average update and validators would record the scores obtained at settlement time. They would then all update the aggregated scores of miners at an agreed upon time. 
+The validators directly use a **quadratic scoring rule** on the miners' predictions. If the miner predicted that $E_i$ be realized with probability $p_i$, upon settlement of the outcome the validator scores the miner by adding $S(p_i, o_i)$ to their moving average of the miner's score.
 
-Denote by $S(p_j, o_i) = (o_i - p_i)^2$ the quadratic scoring rule for a prediction $p_j$ of an event $E_i$ and where $o_i$ is $0$ or $1$ depending on the realization of $E_i$. The lower the quadratic scoring rule the better the score. A quadratic scoring rule is strictly proper i.e it strictly incentivizes miner to report their true prediction.
+### model 2
 
+In this model, we discard the moving average update and validators record the scores they obtained at settlement time. The validators then all update the aggregated scores of miners at an agreed upon time. 
 
-We will implement a sequentially shared quadratic scoring rule. This allows us to score $0$ miners that do not bring new information to the market, as well as to bring value by aggregating information. 
-This functions by scoring each miner relatively to the previous one. The score of the miner $j$ is then $S_j = S(p_j, o_i) - S(p_{j-1}, o_i)$ where $p_{j-1}$ is the submission of the previous miner. Importantly this payoff can be negative, therefore in practice when aggregating the scores of a miner we add a $\max(-,0)$ operation. 
+We implement a **sequentially shared quadratic scoring rule**. This allows us to score $0$ miners that do not bring new information to the market, as well as to bring value by aggregating information. 
+The scoring rule functions by scoring each miner relatively to the previous one. The score of the miner $j$ is then $S_j = S(p_j, o_i) - S(p_{j-1}, o_i)$ where $p_{j-1}$ is the submission of the previous miner. Importantly this payoff can be negative, therefore in practice when aggregating the scores of a miner we add a $\max(-,0)$ operation. 
 
 The aggregated score of a miner that a validator sends to the blockchain is the following:
 
 $$\frac{1}{N} \sum_j S_j$$
-where $N$ is the number of events that the subnet registered as settled during the tempo.
+where $N$ is the number of events that the validator registered as settled during the tempo.
 
 We give miners a score of $0$ on the events for which they did not submit a prediction.
 
-In the first implementation, instead of paying the miner for their delta to the previous prediction, we pay them for their delta to the Polymarket probability at the submission time i.e $S(p_j, o_i) - S(\text{price on polymarket at t}, o_i)$ where $p_j$ is submitted at $t$.
+In the first iteration of the model, instead of paying the miner for their delta to the previous prediction, we will pay them for their delta to the Polymarket probability at the submission time i.e $S(p_j, o_i) - S(\text{price on polymarket at t}, o_i)$ where $p_j$ is submitted at $t$.
 
 ## Incentive compability
 
