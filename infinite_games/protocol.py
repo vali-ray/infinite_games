@@ -39,38 +39,18 @@ import bittensor as bt
 #   dummy_output = dendrite.query( Dummy( dummy_input = 1 ) )
 #   assert dummy_output == 2
 
+class EventPredictionSynapse(bt.Synapse):
+    # Dictionary of predictions. The keys are Polymarket condition
+    # IDs, the values are the probability of the *second* result
+    # occurring, so certainty that the first result occurs would be 0.0
 
-class Dummy(bt.Synapse):
-    """
-    A simple dummy protocol representation which uses bt.Synapse as its base.
-    This protocol helps in handling dummy request and response communication between
-    the miner and the validator.
+    events: dict = {}
 
-    Attributes:
-    - dummy_input: An integer value representing the input request sent by the validator.
-    - dummy_output: An optional integer value which, when filled, represents the response from the miner.
-    """
+    def init(self, activate_markets):
+        self.events = {}
+        for cid in activate_markets.keys():
+            self.events[cid] = 0.5
+            #0.5 is probably the init value for each event
 
-    # Required request input, filled by sending dendrite caller.
-    dummy_input: int
 
-    # Optional request output, filled by recieving axon.
-    dummy_output: typing.Optional[int] = None
 
-    def deserialize(self) -> int:
-        """
-        Deserialize the dummy output. This method retrieves the response from
-        the miner in the form of dummy_output, deserializes it and returns it
-        as the output of the dendrite.query() call.
-
-        Returns:
-        - int: The deserialized response, which in this case is the value of dummy_output.
-
-        Example:
-        Assuming a Dummy instance has a dummy_output value of 5:
-        >>> dummy_instance = Dummy(dummy_input=4)
-        >>> dummy_instance.dummy_output = 5
-        >>> dummy_instance.deserialize()
-        5
-        """
-        return self.dummy_output

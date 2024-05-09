@@ -19,9 +19,9 @@
 
 import bittensor as bt
 
-from template.protocol import Dummy
-from template.validator.reward import get_rewards
-from template.utils.uids import get_random_uids
+from infinite_games.protocol import Dummy
+from infinite_games.validator.reward import get_rewards
+from infinite_games.utils.uids import get_random_uids
 
 
 async def forward(self):
