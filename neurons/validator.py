@@ -36,6 +36,22 @@ RETRY_TIME = 5 # In seconds
 #CUTOFF = 7200 # Roughly a day
 CUTOFF = 10
 
+def retry_to_effect(url):
+    try:
+        return requests.get(url).json()
+    except json.decoder.JSONDecodeError:
+        time.sleep(RETRY_TIME)
+        return retry_to_effect(url)
+
+def get_answer(market):
+    toks = market["tokens"]
+    if toks[0]["winner"]:
+        return 1
+    elif toks[1]["winner"]:
+        return 2
+    else:
+        return None
+    
 
 class Validator(BaseValidatorNeuron):
     """
@@ -206,21 +222,7 @@ class MinerSubmissions:
 
 
 
-def retry_to_effect(url):
-    try:
-        return requests.get(url).json()
-    except json.decoder.JSONDecodeError:
-        time.sleep(RETRY_TIME)
-        return retry_to_effect(url)
 
-def get_answer(market):
-    toks = market["tokens"]
-    if toks[0]["winner"]:
-        return 1
-    elif toks[1]["winner"]:
-        return 2
-    else:
-        return None
 
 
 # The main function parses the configuration and runs the validator.

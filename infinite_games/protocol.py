@@ -20,7 +20,18 @@
 import typing
 import bittensor as bt
 
-# TODO(developer): Rewrite with your protocol definition.
+
+class EventPredictionSynapse(bt.Synapse):
+    # Dictionary of predictions. The keys are Polymarket condition
+    # IDs, the values are the probability of the *second* result
+    # occurring, so certainty that the first result occurs would be 0.0
+
+    events: dict = {}
+
+    def init(self, activate_markets):
+        self.events = {}
+        for cid in activate_markets.keys():
+            self.events[cid] = 0.5
 
 # This is the protocol for the dummy miner and validator.
 # It is a simple request-response protocol where the validator sends a request
@@ -38,19 +49,6 @@ import bittensor as bt
 #   dendrite = bt.dendrite()
 #   dummy_output = dendrite.query( Dummy( dummy_input = 1 ) )
 #   assert dummy_output == 2
-
-class EventPredictionSynapse(bt.Synapse):
-    # Dictionary of predictions. The keys are Polymarket condition
-    # IDs, the values are the probability of the *second* result
-    # occurring, so certainty that the first result occurs would be 0.0
-
-    events: dict = {}
-
-    def init(self, activate_markets):
-        self.events = {}
-        for cid in activate_markets.keys():
-            self.events[cid] = 0.5
-            #0.5 is probably the init value for each event
 
 
 
