@@ -26,8 +26,8 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from reportlab.pdfbase import pdfmetrics
 
-from ocr_subnet.validator.corrupt import corrupt_image
-from ocr_subnet.utils.image import load, serialize
+from infinite_games.validator.corrupt import corrupt_image
+from infinite_games.utils.image import load, serialize
 
 seed = 0
 fake = Faker()

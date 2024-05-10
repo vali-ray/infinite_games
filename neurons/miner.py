@@ -20,11 +20,11 @@ import typing
 import bittensor as bt
 
 # Bittensor OCR Miner
-import ocr_subnet
+import infinite_games
 
 # import base miner class which takes care of most of the boilerplate
-from ocr_subnet.base.miner import BaseMinerNeuron
-from ocr_subnet.validator.reward import EmissionSource
+from infinite_games.base.miner import BaseMinerNeuron
+from infinite_games.validator.reward import EmissionSource
 #from ocr_subnet.protocol import EmissionPredictorSynapse
 
 class Miner(BaseMinerNeuron):
@@ -46,8 +46,8 @@ class Miner(BaseMinerNeuron):
 
 
     async def forward(
-        self, synapse: ocr_subnet.protocol.EventPredictionSynapse
-    ) -> ocr_subnet.protocol.EventPredictionSynapse:
+        self, synapse: infinite_games.protocol.EventPredictionSynapse
+    ) -> infinite_games.protocol.EventPredictionSynapse:
         """
         Processes the incoming synapse and attaches the response to the synapse.
         """
@@ -58,7 +58,7 @@ class Miner(BaseMinerNeuron):
         return synapse
 
     async def blacklist(
-        self, synapse: ocr_subnet.protocol.EventPredictionSynapse
+        self, synapse: infinite_games.protocol.EventPredictionSynapse
     ) -> typing.Tuple[bool, str]:
         """
         Determines whether an incoming request should be blacklisted and thus ignored. Your implementation should
@@ -102,7 +102,7 @@ class Miner(BaseMinerNeuron):
         )
         return False, "Hotkey recognized!"
 
-    async def priority(self, synapse: ocr_subnet.protocol.EventPredictionSynapse) -> float:
+    async def priority(self, synapse: infinite_games.protocol.EventPredictionSynapse) -> float:
         """
         The priority function determines the order in which requests are handled. More valuable or higher-priority
         requests are processed before others. You should design your own priority mechanism with care.
@@ -126,13 +126,13 @@ class Miner(BaseMinerNeuron):
         caller_uid = self.metagraph.hotkeys.index(
             synapse.dendrite.hotkey
         )  # Get the caller index.
-        prirority = float(
+        priority = float(
             self.metagraph.S[caller_uid]
         )  # Return the stake as the priority.
         bt.logging.trace(
-            f"Prioritizing {synapse.dendrite.hotkey} with value: ", prirority
+            f"Prioritizing {synapse.dendrite.hotkey} with value: ", priority
         )
-        return prirority
+        return priority
 
 
 # This is the main function, which runs the miner.

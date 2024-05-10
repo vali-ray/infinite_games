@@ -23,6 +23,15 @@ import torch
 import collections as c
 import requests
 import json
+import infinite_games
+
+# import base validator class which takes care of most of the boilerplate
+from infinite_games.base.validator import BaseValidatorNeuron
+from infinite_games.validator.reward import EmissionSource
+
+RETRY_TIME = 5 # In seconds
+#CUTOFF = 7200 # Roughly a day
+CUTOFF = 10
 
 class MinerSubmissions:
     """
@@ -69,17 +78,6 @@ class MinerSubmissions:
         return result
 
 
-    
-
-import ocr_subnet
-
-# import base validator class which takes care of most of the boilerplate
-from ocr_subnet.base.validator import BaseValidatorNeuron
-from ocr_subnet.validator.reward import EmissionSource
-
-RETRY_TIME = 5 # In seconds
-#CUTOFF = 7200 # Roughly a day
-CUTOFF = 10
 
 def retry_to_effect(url):
     try:
@@ -161,22 +159,9 @@ class Validator(BaseValidatorNeuron):
         return settled_markets
 
     async def forward(self):
-        """
-        The forward function is called by the validator every time step.
-        
-        COMMENT - we want this to happen every tempo / epoch actually not every time step
-
-        It consists of 3 important steps:
-        - Generate a challenge for the miners (in this case it creates a synthetic invoice image)
-        - Query the miners with the challenge
-        - Score the responses from the miners
-
-        Args:
-            self (:obj:`bittensor.neuron.Neuron`): The neuron object which contains all the necessary state for the validator.
-
-        """
+    
         block_start = self.block
-        miner_uids = ocr_subnet.utils.uids.get_all_uids(self)
+        miner_uids = infinite_games.utils.uids.get_all_uids(self)
 
         #update markets
         bt.logging.info("Fetching events...")
@@ -185,7 +170,7 @@ class Validator(BaseValidatorNeuron):
         bt.logging.info("Events fetched")
         
         # Create synapse object to send to the miner.
-        synapse = ocr_subnet.protocol.EventPredictionSynapse()
+        synapse = infinite_games.protocol.EventPredictionSynapse()
         synapse.init(self.active_markets)
 
         bt.logging.info("Querying miners...")
