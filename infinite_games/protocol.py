@@ -30,4 +30,4 @@ class EventPredictionSynapse(bt.Synapse):
         self.events = {}
         for cid in activate_markets.keys():
             self.events[cid] = 0.5
-            #what is this 0.5?
+        
