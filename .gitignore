@@ -3,6 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+#logs
+miner.out
+nohup.out
+
 # C extensions
 *.so
 wandb/
