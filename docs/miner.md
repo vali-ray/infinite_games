@@ -31,7 +31,7 @@ Install and run pm2 commands to keep your validator online at all times.
 
 Example Command for miner
 
-`pm2 start neurons/miner.py --interpreter /usr/bin/python3  --name miner -- --wallet.name miner --netuid 155 --wallet.hotkey hotkey --subtensor.network testnet --logging.debug`
+`pm2 start neurons/miner.py --interpreter /usr/bin/python3  --name miner -- --wallet.name miner --netuid 155 --wallet.hotkey hotkey --subtensor.network test --logging.debug`
 
 
 Variable Explanation
