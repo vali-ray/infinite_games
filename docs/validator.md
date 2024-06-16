@@ -184,6 +184,22 @@ You can monitor the status and logs using these commands:
 `pm2 status`
 `pm2 logs 0`
 
+Useful PM2 Commands
+
+The following Commands will be useful for management:
+
+`pm2 list` # lists all pm2 processes
+
+`pm2 logs <pid>` # replace pid with your process ID to view logs
+
+`pm2 restart <pid>` # restart this pic
+
+`pm2 stop <pid>` # stops your pid
+
+`pm2 del <pid>` # deletes your pid
+
+`pm2 describe <pid>` # prints out metadata on the process
+
 
 ## 7. Get emissions flowing
 
