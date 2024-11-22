@@ -1,0 +1,95 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+
+  build-push:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: gigacodehub
+          password: dckr_pat_zxOwP4RKMtPB3y7Ra0BPaN8A5C8
+
+      - name: Build and push API image for blue environment
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: gigacodehub/validator:test-latest
+
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y python3-pip
+
+      - name: Create .ssh directory
+        run: mkdir -p ~/.ssh
+
+      - name: Install packages
+        run: pip install -r requirements_dev.txt
+
+      - name: Tests
+        run: pytest
+
+      - name: Deploy to server
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+          #TARGET_MONITOR_HOTKEY: ${{ secrets.TARGET_MONITOR_HOTKEY }}
+          #GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
+        run: |
+            ssh-keyscan 37.27.128.247 >> ~/.ssh/known_hosts
+            ssh-keyscan github.com >> ~/.ssh/known_hosts
+            ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+            ssh-add - <<< "-----BEGIN OPENSSH PRIVATE KEY-----
+            b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+            QyNTUxOQAAACA6nW9Hj/ytOWWgdPC19dACQgM/1rbG1tsaOOBCBnVxqQAAAJgveCgEL3go
+            BAAAAAtzc2gtZWQyNTUxOQAAACA6nW9Hj/ytOWWgdPC19dACQgM/1rbG1tsaOOBCBnVxqQ
+            AAAEBxAwiCsvurCJHdztK1+9phz+Ua3whJr2y2+v7esz4Vzzqdb0eP/K05ZaB08LX10AJC
+            Az/WtsbW2xo44EIGdXGpAAAAE2FyeEBNYWNCb29rLVByby1hcngBAg==
+            -----END OPENSSH PRIVATE KEY-----" 
+            ssh -o StrictHostKeyChecking=no root@$37.27.128.247 << 'EOF'
+            #export USE_TORCH=1
+            #export GRAFANA_API_KEY=${{ secrets.GRAFANA_API_KEY }}
+            #export TARGET_MONITOR_HOTKEY=${{ secrets.TARGET_MONITOR_HOTKEY }}            
+            #export WANDB_API_KEY=fa94f417e4b8b50e8e8b52f0c66c511d765eb6b7
+            #pm2 start neurons/validator.py --name validator --interpreter python3 -- --netuid 155 --subtensor.network finney --wallet.name ifkey --wallet.hotkey ifhkey --logging.debug
+            EOF
+     # - name: Send success message to Telegram
+     #   if: ${{ success() }}
+     #   run: |
+     #     BOT_TOKEN="${{ secrets.BOT_TOKEN }}"
+     #     CHAT_ID="-1002124646587"
+     #     MESSAGE="Deploy to validator server prod complete"
+     #     curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
+     #     -d chat_id="${CHAT_ID}" -d text="${MESSAGE}"
+
+    #  - name: Send failure message to Telegram
+    #    if: ${{ failure() }}
+    #    run: |
+    #      BOT_TOKEN="${{ secrets.BOT_TOKEN }}"
+    #      CHAT_ID="-1002124646587"
+    #      MESSAGE="Deploy to validator server prod failed"
+    #      curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
+    #      -d chat_id="${CHAT_ID}" -d text="${MESSAGE}"      
