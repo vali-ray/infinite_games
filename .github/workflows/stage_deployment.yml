@@ -109,7 +109,7 @@ jobs:
     #      -d chat_id="${CHAT_ID}" -d text="${MESSAGE}"  
 
 
-    deploy_miners:
+  deploy_miners:
     needs: [build-push-miner]
     runs-on: ubuntu-latest
 
