@@ -136,20 +136,20 @@ jobs:
             docker rmi gigacodehub/miner:stage-latest
             docker-compose -f docker-compose.miner.yml up -d                   
             EOF
-     # - name: Send success message to Telegram
-     #   if: ${{ success() }}
-     #   run: |
-     #     BOT_TOKEN="${{ secrets.BOT_TOKEN }}"
-     #     CHAT_ID="-1002124646587"
-     #     MESSAGE="Deploy to validator server prod complete"
-     #     curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
-     #     -d chat_id="${CHAT_ID}" -d text="${MESSAGE}"
+      - name: Send success message to Telegram
+        if: ${{ success() }}
+        run: |
+          BOT_TOKEN="${{ secrets.BOT_TOKEN }}"
+          CHAT_ID="-1002124646587"
+          MESSAGE="Deploy to validator/miner server STAGE complete"
+          curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
+          -d chat_id="${CHAT_ID}" -d text="${MESSAGE}"
 
-    #  - name: Send failure message to Telegram
-    #    if: ${{ failure() }}
-    #    run: |
-    #      BOT_TOKEN="${{ secrets.BOT_TOKEN }}"
-    #      CHAT_ID="-1002124646587"
-    #      MESSAGE="Deploy to validator server prod failed"
-    #      curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
-    #      -d chat_id="${CHAT_ID}" -d text="${MESSAGE}"        
+      - name: Send failure message to Telegram
+        if: ${{ failure() }}
+        run: |
+          BOT_TOKEN="${{ secrets.BOT_TOKEN }}"
+          CHAT_ID="-1002124646587"
+          MESSAGE="Deploy to validator/miner server STAGE failed"
+          curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
+          -d chat_id="${CHAT_ID}" -d text="${MESSAGE}"        
