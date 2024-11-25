@@ -35,6 +35,7 @@ jobs:
           tags: gigacodehub/validator:test-latest
 
   deploy:
+    needs: [build-push]
     runs-on: ubuntu-latest
 
     steps:
@@ -64,17 +65,15 @@ jobs:
             ssh-agent -a $SSH_AUTH_SOCK > /dev/null
             ssh-add - <<< "-----BEGIN OPENSSH PRIVATE KEY-----
             b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
-            QyNTUxOQAAACA6nW9Hj/ytOWWgdPC19dACQgM/1rbG1tsaOOBCBnVxqQAAAJgveCgEL3go
-            BAAAAAtzc2gtZWQyNTUxOQAAACA6nW9Hj/ytOWWgdPC19dACQgM/1rbG1tsaOOBCBnVxqQ
-            AAAEBxAwiCsvurCJHdztK1+9phz+Ua3whJr2y2+v7esz4Vzzqdb0eP/K05ZaB08LX10AJC
-            Az/WtsbW2xo44EIGdXGpAAAAE2FyeEBNYWNCb29rLVByby1hcngBAg==
+            QyNTUxOQAAACBV/nWEQ8QITgcea2Ia0Osri4EaqbwTkpk+TdVUWOrX9gAAAJiRfW8zkX1v
+            MwAAAAtzc2gtZWQyNTUxOQAAACBV/nWEQ8QITgcea2Ia0Osri4EaqbwTkpk+TdVUWOrX9g
+            AAAEDHsXKUt6rclqTc1fRkc23MyduTvDheMT4xdzx19liXTlX+dYRDxAhOBx5rYhrQ6yuL
+            gRqpvBOSmT5N1VRY6tf2AAAAE2FyeEBNYWNCb29rLVByby1hcngBAg==
             -----END OPENSSH PRIVATE KEY-----" 
-            ssh -o StrictHostKeyChecking=no root@$37.27.128.247 << 'EOF'
-            #export USE_TORCH=1
-            #export GRAFANA_API_KEY=${{ secrets.GRAFANA_API_KEY }}
-            #export TARGET_MONITOR_HOTKEY=${{ secrets.TARGET_MONITOR_HOTKEY }}            
-            #export WANDB_API_KEY=fa94f417e4b8b50e8e8b52f0c66c511d765eb6b7
-            #pm2 start neurons/validator.py --name validator --interpreter python3 -- --netuid 155 --subtensor.network finney --wallet.name ifkey --wallet.hotkey ifhkey --logging.debug
+            ssh -o StrictHostKeyChecking=no root@37.27.128.247 << 'EOF'
+            docker-compose -f docker-compose.vali.yml down
+            docker rmi gigacodehub/validator:test-latest
+            docker-compose -f docker-compose.vali.yml up -d                   
             EOF
      # - name: Send success message to Telegram
      #   if: ${{ success() }}
