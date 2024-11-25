@@ -7,7 +7,7 @@ on:
 
 jobs:
 
-  build-push:
+  build-push-validator:
 
     runs-on: ubuntu-latest
 
@@ -24,8 +24,8 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
-          username: gigacodehub
-          password: dckr_pat_zxOwP4RKMtPB3y7Ra0BPaN8A5C8
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Build and push validator image 
         uses: docker/build-push-action@v4
@@ -34,8 +34,35 @@ jobs:
           push: true
           tags: gigacodehub/validator:test-latest
 
-  deploy:
-    needs: [build-push]
+  build-push-miner:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build and push validator image 
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: gigacodehub/miner:test-latest        
+
+  deploy_validator:
+    needs: [build-push-validator]
     runs-on: ubuntu-latest
 
     steps:
@@ -69,12 +96,41 @@ jobs:
             docker rmi gigacodehub/validator:test-latest
             docker-compose -f docker-compose.vali.yml up -d                   
             EOF
+
+  deploy_miner:
+    needs: [build-push-miner]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y python3-pip
+
+      - name: Create .ssh directory
+        run: mkdir -p ~/.ssh
+
+      - name: Deploy to server
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: |
+            ssh-keyscan -p ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_STAGE_MINER_IP }} >> ~/.ssh/known_hosts
+            ssh-keyscan github.com >> ~/.ssh/known_hosts
+            ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+            ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}" 
+            ssh -o StrictHostKeyChecking=no root@${{ secrets.SERVER_STAGE_MINER_IP }} -p ${{ secrets.SERVER_PORT }} << 'EOF'
+            docker-compose -f docker-compose.develop-miner.yml down
+            docker rmi gigacodehub/miner:test-latest
+            docker-compose -f docker-compose.develop-miner.yml up -d                   
+            EOF
+            
       - name: Send success message to Telegram
         if: ${{ success() }}
         run: |
           BOT_TOKEN="${{ secrets.BOT_TOKEN }}"
           CHAT_ID="-1002124646587"
-          MESSAGE="Deploy to validator server DEVELOP complete"
+          MESSAGE="Deploy to validator/miner server DEVELOP complete"
           curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
           -d chat_id="${CHAT_ID}" -d text="${MESSAGE}"
 
@@ -83,6 +139,6 @@ jobs:
         run: |
           BOT_TOKEN="${{ secrets.BOT_TOKEN }}"
           CHAT_ID="-1002124646587"
-          MESSAGE="Deploy to validator server DEVELOP failed"
+          MESSAGE="Deploy to validator/miner server DEVELOP failed"
           curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
           -d chat_id="${CHAT_ID}" -d text="${MESSAGE}"      
