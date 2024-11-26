@@ -1,0 +1,47 @@
+name: Sync to Public Repository
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync-to-public:
+    
+    if: contains(github.event.head_commit.message, 'public push')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout private repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          
+      - name: Push to public repository
+        env:
+          PUBLIC_REPO_TOKEN: ${{ secrets.PUBLIC_REPO_TOKEN }}
+        run: |
+        
+          git remote add public https://x-access-token:${PUBLIC_REPO_TOKEN}@github.com/USERNAME/PUBLIC_REPO_NAME.git
+          git push public main:main --force
+          
+      - name: Send success message to Telegram
+        if: success()
+        run: |
+          BOT_TOKEN="${{ secrets.BOT_TOKEN }}"
+          CHAT_ID="-1002124646587"
+          MESSAGE="Sync public repo complete"
+          curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
+          -d chat_id="${CHAT_ID}" -d text="${MESSAGE}"
+          
+      - name: Send failure message to Telegram
+        if: failure()
+        run: |
+          BOT_TOKEN="${{ secrets.BOT_TOKEN }}"
+          CHAT_ID="-1002124646587"
+          MESSAGE="Sync public repo fail"
+          curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
+          -d chat_id="${CHAT_ID}" -d text="${MESSAGE}"
