@@ -30,15 +30,15 @@ jobs:
             ssh-agent -a $SSH_AUTH_SOCK > /dev/null
             ssh-add - <<< "${{ secrets.SSH_STAGE_PRIVATE_KEY }}" 
             ssh -o StrictHostKeyChecking=no root@${{ secrets.SERVER_PROD_VALIDATOR_IP }} -p ${{ secrets.SERVER_PORT }} << 'EOF'
-            cd /root/infinite_games
-            git pull
-            pm2 delete validator
+            cd /root/if-games-validator
+            git pull            
             source venv/bin/activate
             pip install -r requirements.txt
             export USE_TORCH=1
             export GRAFANA_API_KEY=${{ secrets.GRAFANA_API_KEY }}
             export TARGET_MONITOR_HOTKEY=${{ secrets.TARGET_MONITOR_HOTKEY }}            
             export WANDB_API_KEY=fa94f417e4b8b50e8e8b52f0c66c511d765eb6b7
+            pm2 delete validator
             pm2 start neurons/validator.py --name validator --interpreter python3 -- --netuid 6 --subtensor.network finney --wallet.name ifkey --wallet.hotkey ifhkey --logging.debug
             EOF
       - name: Send success message to Telegram
