@@ -93,7 +93,7 @@ The final score is a linear combination of the weighted average and of a linear 
 This is described in details [here](https://hackmd.io/@nielsma/S1sB8xO_C).
 
 
-### model 3
+## model 3
 
 
 We implement a **sequentially shared quadratic scoring rule**. This allows us crucially to aggregate information as well as to score $0$ miners that do not bring new information to the market.
