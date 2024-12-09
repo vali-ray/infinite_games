@@ -81,17 +81,11 @@ jobs:
           #TARGET_MONITOR_HOTKEY: ${{ secrets.TARGET_MONITOR_HOTKEY }}
           #GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
         run: |
-            ssh-keyscan -p ${{ secrets.SERVER_PORT }} 37.27.128.247 >> ~/.ssh/known_hosts
+            ssh-keyscan -p ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_DEVELOP_VALIDATOR_IP }} >> ~/.ssh/known_hosts
             ssh-keyscan github.com >> ~/.ssh/known_hosts
             ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-            ssh-add - <<< "-----BEGIN OPENSSH PRIVATE KEY-----
-            b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
-            QyNTUxOQAAACBV/nWEQ8QITgcea2Ia0Osri4EaqbwTkpk+TdVUWOrX9gAAAJiRfW8zkX1v
-            MwAAAAtzc2gtZWQyNTUxOQAAACBV/nWEQ8QITgcea2Ia0Osri4EaqbwTkpk+TdVUWOrX9g
-            AAAEDHsXKUt6rclqTc1fRkc23MyduTvDheMT4xdzx19liXTlX+dYRDxAhOBx5rYhrQ6yuL
-            gRqpvBOSmT5N1VRY6tf2AAAAE2FyeEBNYWNCb29rLVByby1hcngBAg==
-            -----END OPENSSH PRIVATE KEY-----" 
-            ssh -o StrictHostKeyChecking=no root@37.27.128.247 -p ${{ secrets.SERVER_PORT }} << 'EOF'
+            ssh-add - <<< "${{ secrets.SSH_STAGE_PRIVATE_KEY }}" 
+            ssh -o StrictHostKeyChecking=no root@{{ secrets.SERVER_DEVELOP_VALIDATOR_IP }} -p ${{ secrets.SERVER_PORT }} << 'EOF'
             docker-compose -f docker-compose.vali.yml down
             docker rmi gigacodehub/validator:test-latest
             docker-compose -f docker-compose.vali.yml up -d                   
@@ -161,7 +155,7 @@ jobs:
         if: success()
         run: |
           BOT_TOKEN="${{ secrets.BOT_TOKEN }}"
-          CHAT_ID="-1002124646587"
+          CHAT_ID="${{ secrets.CHAT_ID }}"
           MESSAGE="Deploy to validator/miner server DEVELOP complete"
           curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
           -d chat_id="${CHAT_ID}" -d text="${MESSAGE}"
@@ -170,7 +164,7 @@ jobs:
         if: failure()
         run: |
           BOT_TOKEN="${{ secrets.BOT_TOKEN }}"
-          CHAT_ID="-1002124646587"
+          CHAT_ID="${{ secrets.CHAT_ID }}"
           MESSAGE="Deploy to validator/miner server DEVELOP failed"
           curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
           -d chat_id="${CHAT_ID}" -d text="${MESSAGE}"  
