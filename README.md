@@ -114,7 +114,7 @@ We also want to incorporate a progress or stability component in the scoring rul
 
 See [here](docs/mechanism.md) for a discussion of our mechanism. -->
 
-## Roadmap
+### Roadmap
 
 - Scoring with exponentially decreasing weights until settlement date and linear differentiation mechanism - July 25th 
 - Synthetic event generation with central resolution using ACLED data - early August
