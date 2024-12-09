@@ -25,8 +25,8 @@ jobs:
           PUBLIC_REPO_TOKEN: ${{ secrets.PUBLIC_REPO_TOKEN }}
         run: |
         
-          git remote add public https://x-access-token:${PUBLIC_REPO_TOKEN}@github.com/USERNAME/PUBLIC_REPO_NAME.git
-          git push public main:main --force
+          git remote add public https://x-access-token:${PUBLIC_REPO_TOKEN}@github.com/vali-ray/infinite_games.git
+          git push public main:pre-prod --force
           
       - name: Send success message to Telegram
         if: success()
