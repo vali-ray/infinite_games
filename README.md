@@ -28,7 +28,7 @@
 
 # Forecasting of Future Events
 
-##  Introduction
+###  Introduction
 
 
 We incentivize the prediction of future events. The prediction space is based on binary future events such as the one listed on [Polymarket](https://polymarket.com/) and on [Azuro](https://azuro.org/). We are always actively expanding to new markets and providers. We are focused on *judgemental forecasting* rather than *statistical forecasting*. We hence expect the models used by miners to be LLMs. 
