@@ -151,7 +151,7 @@ A detailed explanation of how to set up a wallet can be found [here](https://doc
 We also provide some indications [here](docs/wallet-setup.md).
 
 
-## References
+### References
 
 | Reference ID | Author(s) | Year | Title |
 |--------------|-----------|------|-------|
